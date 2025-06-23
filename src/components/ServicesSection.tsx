@@ -2,7 +2,15 @@ import React from 'react';
 import { TrendingUp, Code, Headphones, Database } from 'lucide-react';
 
 const ServicesSection = () => {
-  const services = [
+  type ServiceColor = 'blue' | 'green' | 'purple' | 'rose' | 'orange';
+
+  const services: {
+    icon: React.ReactNode;
+    title: string;
+    description: string;
+    result: string;
+    color: ServiceColor;
+  }[] = [
     {
       icon: <TrendingUp size={32} />,
       title: 'Product Leadership',
@@ -34,7 +42,7 @@ const ServicesSection = () => {
   ];
 
   // Color mapping to ensure proper Tailwind classes
-  const getColorClasses = (color) => {
+  const getColorClasses = (color: 'blue' | 'green' | 'purple' | 'rose' | 'orange') => {
     const colorMap = {
       blue: 'text-blue-600',
       green: 'text-green-600',

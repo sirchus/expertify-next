@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 
 const Footer = React.memo(() => {
   const currentYear = new Date().getFullYear();
@@ -9,7 +10,14 @@ const Footer = React.memo(() => {
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           {/* Logo/Brand */}
           <div className="text-xl font-bold text-blue-600">            
-                 <img src="/expertify_puzzle_logo.svg" alt="Expertify" className="h-8 lg:h-10 w-auto"/>
+                 <Image
+                   src="/expertify_puzzle_logo.svg"
+                   alt="Expertify"
+                   width={40}
+                   height={40}
+                   className="h-8 lg:h-10 w-auto"
+                   priority
+                 />
           </div>
 
           {/* Copyright */}

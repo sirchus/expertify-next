@@ -1,8 +1,19 @@
 import React from 'react';
 import { Star } from 'lucide-react';
 
+type TestimonialColor = 'blue' | 'green' | 'purple' | 'rose' | 'orange';
+
+type Testimonial = {
+  quote: string;
+  name: string;
+  role: string;
+  initials: string;
+  score: number;
+  color: TestimonialColor;
+};
+
 const TestimonialsSection = () => {
-  const testimonials = [
+  const testimonials: Testimonial[] = [
     {
       quote: 'Our fractional CTO helped us scale from 10 to 50 engineers in 8 months. The expertise and strategic guidance were invaluable for our growth.',
       name: 'Chris J.',
@@ -38,7 +49,7 @@ const TestimonialsSection = () => {
   ];
 
   // Color mapping to ensure proper Tailwind classes
-  const getColorClasses = (color) => {
+  const getColorClasses = (color: 'blue' | 'green' | 'purple' | 'rose' | 'orange') => {
     const colorMap = {
       blue: 'bg-blue-400',
       green: 'bg-green-400',

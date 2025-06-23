@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, AlertCircle, CheckCircle } from 'lucide-react';
 
 // Component imports
@@ -134,15 +134,15 @@ const BackToTopButton = () => {
 
 // Main App Component
 export default function ExpertifySPA() {
-  const [email, setEmail] = useState('');
+  const [email] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  // const [isSubmitting, setIsSubmitting] = useState(false);
+  // const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
   // Custom hooks
-  const { error: validationError, isValid } = useEmailValidation(email);
+  useEmailValidation(email);
   const { scrollToSection } = useScrollToSection();
-  const { toastVisible, toastMessage, toastType, showToast, hideToast } = useToast();
+  const { toastVisible, toastMessage, toastType, hideToast } = useToast();
 
   // Navigation items
   const navItems: NavItem[] = [
@@ -152,33 +152,6 @@ export default function ExpertifySPA() {
     { label: 'Contact', target: 'contact' }
   ];
 
-  // Handle email form submission
-  const handleEmailSubmit = useCallback(async () => {
-    if (!isValid || !email.trim()) return;
-
-    setIsSubmitting(true);
-    setSubmitStatus('idle');
-
-    try {
-      // Simulate API call with realistic timing
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Simulate success/failure (85% success rate)
-      if (Math.random() > 0.15) {
-        setSubmitStatus('success');
-        showToast('Thanks! We\'ll be in touch within 24 hours.', 'success');
-        setEmail(''); // Clear form on success
-      } else {
-        throw new Error('Network error');
-      }
-    } catch (error) {
-      setSubmitStatus('error');
-      showToast('Something went wrong. Please try again.', 'error');
-      console.error('Submission error:', error);
-    } finally {
-      setIsSubmitting(false);
-    }
-  }, [email, isValid, showToast]);
 
   // Handle mobile menu outside clicks
   useEffect(() => {
@@ -224,16 +197,8 @@ export default function ExpertifySPA() {
         />
         
         <main role="main">
-          <HeroSection 
-            // email={email}
-            // setEmail={setEmail}
-            // onSubmit={handleEmailSubmit}
-            // isSubmitting={isSubmitting}
-            // validationError={validationError}
-            // submitStatus={submitStatus}
-          />
-
-          <PartnersSection/>
+          <HeroSection />
+          <PartnersSection />
           <HowItWorksSection />
           <ServicesSection />
           <TestimonialsSection />
