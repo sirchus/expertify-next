@@ -1,17 +1,22 @@
+// src/components/HeroSection.tsx (Fixed)
+'use client';
+
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Loader2, CheckCircle, AlertCircle, Users, Target } from 'lucide-react';
 
 const HeroSection = () => {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [status, setStatus] = useState<'success' | 'error' | null>(null); // 'success', 'error', or null
+  const [status, setStatus] = useState<'success' | 'error' | null>(null);
 
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
 
-  const handleSubmit = async (e : React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!email.trim() || !validateEmail(email)) {
@@ -48,20 +53,11 @@ const HeroSection = () => {
   };
 
   const handleJoinAsExpert = () => {
-    // TODO: Navigate to expert application page or open modal
-    console.log('Join as Expert clicked');
-    // For now, you can add navigation logic here
-    // Example: router.push('/apply-as-expert') or open a modal
+    router.push('/apply-as-expert');
   };
 
   const handleFindTalent = () => {
-    // TODO: Navigate to client onboarding or scroll to contact section
-    console.log('Find Top Talent clicked');
-    // Example: scroll to contact section or open client form
-    const contactSection = document.getElementById('contact');
-    if (contactSection) {
-      contactSection.scrollIntoView({ behavior: 'smooth' });
-    }
+    router.push('/find-talent');
   };
 
   const getStatusMessage = () => {
