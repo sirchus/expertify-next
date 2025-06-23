@@ -119,7 +119,7 @@ const HeroSection = () => {
             )}
 
             <p className="text-sm text-gray-600">
-              Join thousands of businesses already using our platform
+              Join other businesses already using our platform
             </p>
           </form>
         </div>
