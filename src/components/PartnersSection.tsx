@@ -25,7 +25,7 @@ const PartnersSection = React.memo(() => {
         <div className="mb-16">
           {/* <h2 className="text-3xl md:text-4xl font-bold mb-6 text-gray-900">Trusted by Leading Companies</h2> */}
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Join our list of partner companies that have accelerated their growth with our fractional executives
+            Join our partners that have accelerated their growth with our fractional executives
           </p>
         </div>
         
