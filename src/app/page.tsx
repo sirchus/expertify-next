@@ -225,12 +225,12 @@ export default function ExpertifySPA() {
         
         <main role="main">
           <HeroSection 
-            email={email}
-            setEmail={setEmail}
-            onSubmit={handleEmailSubmit}
-            isSubmitting={isSubmitting}
-            validationError={validationError}
-            submitStatus={submitStatus}
+            // email={email}
+            // setEmail={setEmail}
+            // onSubmit={handleEmailSubmit}
+            // isSubmitting={isSubmitting}
+            // validationError={validationError}
+            // submitStatus={submitStatus}
           />
 
           <PartnersSection/>
