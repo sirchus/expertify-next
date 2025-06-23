@@ -1,13 +1,16 @@
-// src/app/api/forms/expert/route.ts
 import { NextRequest, NextResponse } from 'next/server';
+import { sendAdminNotification, type ExpertFormData } from '@/lib/email';
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { formType, data, submittedAt } = body;
 
+    // Type the data properly
+    const expertData = data as ExpertFormData;
+
     // Validate required fields
-    const requiredFields = [
+    const requiredFields: (keyof ExpertFormData)[] = [
       'First-Name',
       'Last-Name', 
       'Email-Address',
@@ -20,7 +23,7 @@ export async function POST(request: NextRequest) {
       'Referral'
     ];
 
-    const missingFields = requiredFields.filter(field => !data[field]?.trim());
+    const missingFields = requiredFields.filter(field => !expertData[field]?.trim());
     
     if (missingFields.length > 0) {
       return NextResponse.json(
@@ -31,40 +34,48 @@ export async function POST(request: NextRequest) {
 
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(data['Email-Address'])) {
+    if (!emailRegex.test(expertData['Email-Address'])) {
       return NextResponse.json(
         { error: 'Invalid email format' },
         { status: 400 }
       );
     }
 
-    // Here you would typically:
-    // 1. Save to database
-    // 2. Send confirmation email
-    // 3. Notify internal team
-    // 4. Integrate with CRM/ATS
-
-    // For now, we'll just log the data
+    // Log the application
     console.log('Expert Application Received:', {
       formType,
       submittedAt,
       applicant: {
-        name: `${data['First-Name']} ${data['Last-Name']}`,
-        email: data['Email-Address'],
-        function: data['Function'],
-        seniority: data['Seniority'],
-        rate: data['Rate']
+        name: `${expertData['First-Name']} ${expertData['Last-Name']}`,
+        email: expertData['Email-Address'],
+        function: expertData['Function'],
+        seniority: expertData['Seniority'],
+        rate: expertData['Rate']
       },
-      data
+      data: expertData
     });
+
+    // Send admin notification email
+    try {
+      const emailSent = await sendAdminNotification('expert', expertData);
+      if (emailSent) {
+        console.log('Admin notification email sent successfully');
+      } else {
+        console.error('Failed to send admin notification email');
+      }
+    } catch (emailError) {
+      console.error('Email notification error:', emailError);
+      // Don't fail the request if email fails
+    }
 
     // Simulate API processing time
     await new Promise(resolve => setTimeout(resolve, 1000));
 
-    // Example: Send to webhook, database, or email service
-    // await saveToDatabase('expert_applications', data);
-    // await sendToSlack('New expert application received', data);
-    // await addToAirtable('Expert Pipeline', data);
+    // Here you would typically also:
+    // - Save to database
+    // - Send confirmation email to applicant
+    // - Add to ATS/CRM
+    // - Trigger Slack notification
 
     return NextResponse.json({
       success: true,

@@ -1,13 +1,16 @@
-// src/app/api/forms/client/route.ts
 import { NextRequest, NextResponse } from 'next/server';
+import { sendAdminNotification, type TalentFormData } from '@/lib/email';
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { formType, data, submittedAt } = body;
 
+    // Type the data properly
+    const talentData = data as TalentFormData;
+
     // Validate required fields
-    const requiredFields = [
+    const requiredFields: (keyof TalentFormData)[] = [
       'Your-Name',
       'Job-Title',
       'Email-Address',
@@ -23,7 +26,7 @@ export async function POST(request: NextRequest) {
       'How-Did-You-Hear'
     ];
 
-    const missingFields = requiredFields.filter(field => !data[field]?.trim());
+    const missingFields = requiredFields.filter(field => !talentData[field]?.trim());
     
     if (missingFields.length > 0) {
       return NextResponse.json(
@@ -34,42 +37,49 @@ export async function POST(request: NextRequest) {
 
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(data['Email-Address'])) {
+    if (!emailRegex.test(talentData['Email-Address'])) {
       return NextResponse.json(
         { error: 'Invalid email format' },
         { status: 400 }
       );
     }
 
-    // Here you would typically:
-    // 1. Save to database
-    // 2. Send confirmation email  
-    // 3. Notify internal team
-    // 4. Integrate with CRM
-    // 5. Trigger matching algorithm
-
-    // For now, we'll just log the data
+    // Log the request
     console.log('Talent Request Received:', {
       formType,
       submittedAt,
       client: {
-        name: data['Your-Name'],
-        title: data['Job-Title'],
-        company: data['Business-Name'],
-        email: data['Email-Address'],
-        role: data['Fractional-Role'],
-        budget: data['Budget']
+        name: talentData['Your-Name'],
+        title: talentData['Job-Title'],
+        company: talentData['Business-Name'],
+        email: talentData['Email-Address'],
+        role: talentData['Fractional-Role'],
+        budget: talentData['Budget']
       },
-      data
+      data: talentData
     });
+
+    // Send admin notification email
+    try {
+      const emailSent = await sendAdminNotification('talent', talentData);
+      if (emailSent) {
+        console.log('Admin notification email sent successfully');
+      } else {
+        console.error('Failed to send admin notification email');
+      }
+    } catch (emailError) {
+      console.error('Email notification error:', emailError);
+      // Don't fail the request if email fails
+    }
 
     // Simulate API processing time
     await new Promise(resolve => setTimeout(resolve, 1000));
 
-    // Example: Send to webhook, database, or email service
-    // await saveToDatabase('talent_requests', data);
-    // await sendToSlack('New talent request received', data);
-    // await triggerMatching(data);
+    // Here you would typically also:
+    // - Save to database
+    // - Send confirmation email to client
+    // - Trigger matching algorithm
+    // - Notify internal team via Slack
 
     return NextResponse.json({
       success: true,

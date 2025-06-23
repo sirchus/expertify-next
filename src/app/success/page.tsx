@@ -41,7 +41,7 @@ export default function SuccessPage() {
               <div className="bg-gray-50 rounded-lg p-4 text-center">
                 <Calendar className="h-6 w-6 text-purple-600 mx-auto mb-2" />
                 <h3 className="font-semibold text-gray-900 mb-1">Next Steps</h3>
-                <p className="text-sm text-gray-600">We'll schedule a call if you're a good fit</p>
+                <p className="text-sm text-gray-600">We&#39;ll schedule a call if you&#39;re a good fit</p>
               </div>
             </div>
 
